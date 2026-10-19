@@ -26,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.seeme.data.model.CoinWallet
+import com.example.seeme.data.model.UserProfile
 import com.example.seeme.ui.theme.*
 
 data class PostThumbnail(
@@ -39,7 +40,9 @@ data class PostThumbnail(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
+    userProfile: UserProfile,
     wallet: CoinWallet,
+    onRequireAuth: () -> Unit = {},
     onEditProfile: () -> Unit = {},
     onOpenWallet: () -> Unit = {},
     onTopUpCoins: () -> Unit = {},
@@ -72,18 +75,20 @@ fun ProfileScreen(
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = "alex_riviera",
+                    text = if (userProfile.isGuest) "guest_viewer" else userProfile.handle.removePrefix("@"),
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 20.sp,
                     color = InstagramTextDark
                 )
-                Spacer(modifier = Modifier.width(4.dp))
-                Icon(
-                    imageVector = Icons.Filled.Verified,
-                    contentDescription = "Verified",
-                    tint = InstagramPink,
-                    modifier = Modifier.size(18.dp)
-                )
+                if (!userProfile.isGuest) {
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Icon(
+                        imageVector = Icons.Filled.Verified,
+                        contentDescription = "Verified",
+                        tint = InstagramPink,
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
             }
 
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -92,6 +97,44 @@ fun ProfileScreen(
                 }
                 IconButton(onClick = {}) {
                     Icon(imageVector = Icons.Filled.Menu, contentDescription = "Menu", tint = InstagramTextDark)
+                }
+            }
+        }
+
+        // Guest Viewer Mode Banner
+        if (userProfile.isGuest) {
+            Card(
+                shape = RoundedCornerShape(20.dp),
+                colors = CardDefaults.cardColors(containerColor = SmokeWhiteSurface),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 8.dp)
+                    .shadow(4.dp, RoundedCornerShape(20.dp))
+                    .border(1.dp, InstagramPink.copy(alpha = 0.4f), RoundedCornerShape(20.dp))
+            ) {
+                Column(
+                    modifier = Modifier.padding(18.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text("👤", fontSize = 24.sp)
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Column {
+                            Text("Guest Mode Active", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = InstagramTextDark)
+                            Text("Watch streams & tip coins. Sign up required to Go Live!", fontSize = 12.sp, color = InstagramTextSecondary)
+                        }
+                    }
+
+                    Button(
+                        onClick = onRequireAuth,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(44.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = InstagramPink),
+                        shape = CircleShape
+                    ) {
+                        Text("Sign Up as Creator to Go Live 🚀", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = Color.White)
+                    }
                 }
             }
         }
@@ -120,7 +163,7 @@ fun ProfileScreen(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "AR",
+                    text = userProfile.name.take(2).uppercase(),
                     fontWeight = FontWeight.Bold,
                     fontSize = 26.sp,
                     color = Color.White
@@ -131,9 +174,9 @@ fun ProfileScreen(
                 modifier = Modifier.weight(1f),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                ProfileStatItem("Posts", "18")
-                ProfileStatItem("Followers", "12.4K")
-                ProfileStatItem("Following", "482")
+                ProfileStatItem("Posts", if (userProfile.isGuest) "0" else "18")
+                ProfileStatItem("Followers", if (userProfile.isGuest) "0" else "12.4K")
+                ProfileStatItem("Following", if (userProfile.isGuest) "0" else "482")
             }
         }
 
@@ -143,18 +186,18 @@ fun ProfileScreen(
                 .padding(horizontal = 20.dp, vertical = 12.dp)
         ) {
             Text(
-                text = "Alex Riviera",
+                text = "${userProfile.countryFlag} ${userProfile.name}",
                 fontWeight = FontWeight.Bold,
                 fontSize = 15.sp,
                 color = InstagramTextDark
             )
             Text(
-                text = "Video Creator & Live Streamer 🎥",
+                text = "${userProfile.category} • SeeMe Creator",
                 fontSize = 13.sp,
                 color = InstagramTextSecondary
             )
             Text(
-                text = "Building social video apps with Jetpack Compose 🚀\nJoin my live streams every day!",
+                text = userProfile.bio,
                 fontSize = 13.sp,
                 color = InstagramTextDark
             )
@@ -168,13 +211,13 @@ fun ProfileScreen(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             OutlinedButton(
-                onClick = onEditProfile,
+                onClick = { if (userProfile.isGuest) onRequireAuth() else onEditProfile() },
                 modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(10.dp),
                 border = BorderStroke(1.dp, SmokeWhiteBorder),
                 colors = ButtonDefaults.outlinedButtonColors(contentColor = InstagramTextDark)
             ) {
-                Text("Edit Profile", fontWeight = FontWeight.SemiBold, fontSize = 13.sp)
+                Text(if (userProfile.isGuest) "Sign Up" else "Edit Profile", fontWeight = FontWeight.SemiBold, fontSize = 13.sp)
             }
 
             OutlinedButton(

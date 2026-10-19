@@ -22,6 +22,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.seeme.ui.auth.AuthDialog
+import com.example.seeme.ui.auth.AuthViewModel
 import com.example.seeme.ui.broadcast.BroadcastScreen
 import com.example.seeme.ui.coin.CoinViewModel
 import com.example.seeme.ui.components.TokenPurchaseDialog
@@ -48,15 +50,18 @@ sealed class Screen(val route: String) {
 @Composable
 fun AppNavigation(
     modifier: Modifier = Modifier,
-    coinViewModel: CoinViewModel = viewModel()
+    coinViewModel: CoinViewModel = viewModel(),
+    authViewModel: AuthViewModel = viewModel()
 ) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     val wallet by coinViewModel.wallet.collectAsState()
     val transactions by coinViewModel.transactions.collectAsState()
+    val currentUser by authViewModel.currentUser.collectAsState()
 
     var showTokenPurchaseDialog by remember { mutableStateOf(false) }
+    var showAuthDialog by remember { mutableStateOf(false) }
 
     val showBottomBar = currentRoute in listOf(Screen.Home.route, Screen.Profile.route)
 
@@ -96,7 +101,7 @@ fun AppNavigation(
                         )
                     )
 
-                    // Go Live Studio FAB
+                    // Go Live Studio FAB (Requires Auth)
                     Box(
                         modifier = Modifier
                             .weight(1f)
@@ -104,7 +109,13 @@ fun AppNavigation(
                         contentAlignment = Alignment.Center
                     ) {
                         FloatingActionButton(
-                            onClick = { navController.navigate(Screen.Broadcast.route) },
+                            onClick = {
+                                if (currentUser.isGuest) {
+                                    showAuthDialog = true
+                                } else {
+                                    navController.navigate(Screen.Broadcast.route)
+                                }
+                            },
                             containerColor = InstagramPink,
                             contentColor = Color.White,
                             shape = CircleShape,
@@ -192,7 +203,9 @@ fun AppNavigation(
                 }
                 composable(Screen.Profile.route) {
                     ProfileScreen(
+                        userProfile = currentUser,
                         wallet = wallet,
+                        onRequireAuth = { showAuthDialog = true },
                         onEditProfile = { navController.navigate(Screen.EditProfile.route) },
                         onOpenWallet = { navController.navigate(Screen.Wallet.route) },
                         onTopUpCoins = { showTokenPurchaseDialog = true }
@@ -212,6 +225,23 @@ fun AppNavigation(
                         onSave = { navController.popBackStack() }
                     )
                 }
+            }
+
+            // Mandatory Go Live Creator Sign Up Gate Sheet
+            if (showAuthDialog) {
+                AuthDialog(
+                    onDismiss = { showAuthDialog = false },
+                    onSignUpCreator = { name, handle, email, password, country, category ->
+                        authViewModel.signUpCreator(name, handle, email, country, category)
+                        showAuthDialog = false
+                        navController.navigate(Screen.Broadcast.route)
+                    },
+                    onSignIn = { email ->
+                        authViewModel.signIn(email)
+                        showAuthDialog = false
+                        navController.navigate(Screen.Broadcast.route)
+                    }
+                )
             }
 
             if (showTokenPurchaseDialog) {
