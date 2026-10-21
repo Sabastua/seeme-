@@ -31,6 +31,7 @@ import com.example.seeme.ui.coin.CoinViewModel
 import com.example.seeme.ui.components.TokenPurchaseDialog
 import com.example.seeme.ui.discover.CreatorSuggestionsScreen
 import com.example.seeme.ui.discover.DiscoverHomeScreen
+import com.example.seeme.ui.dm.DirectMessageScreen
 import com.example.seeme.ui.feed.FeedScreen
 import com.example.seeme.ui.pk.PKBattleScreen
 import com.example.seeme.ui.profile.EditProfileScreen
@@ -51,6 +52,7 @@ sealed class Screen(val route: String) {
     object PKBattle : Screen("pk_battle")
     object AnalyticsStudio : Screen("analytics_studio")
     object AdminDashboard : Screen("admin_dashboard")
+    object DirectMessages : Screen("direct_messages")
 }
 
 @Composable
@@ -232,6 +234,11 @@ fun AppNavigation(
                 }
                 composable(Screen.AdminDashboard.route) {
                     AdminDashboardScreen(
+                        onBack = { navController.popBackStack() }
+                    )
+                }
+                composable(Screen.DirectMessages.route) {
+                    DirectMessageScreen(
                         onBack = { navController.popBackStack() }
                     )
                 }

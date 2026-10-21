@@ -2,6 +2,7 @@ package com.example.seeme.ui.components
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
@@ -18,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -26,15 +28,9 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.border
-import androidx.compose.ui.draw.shadow
 import com.example.seeme.data.model.LiveComment
 import com.example.seeme.data.model.VideoItem
 import com.example.seeme.ui.theme.*
-import com.example.seeme.ui.theme.InstagramPink
-import com.example.seeme.ui.theme.InstagramTextDark
-import com.example.seeme.ui.theme.SmokeWhiteBorder
-import com.example.seeme.ui.theme.SmokeWhiteSurface
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.random.Random
@@ -55,15 +51,16 @@ fun LiveOverlay(
     onLikeClicked: () -> Unit = {},
     onShareClicked: () -> Unit = {},
     onFollowClicked: () -> Unit = {},
-    onTipClicked: () -> Unit = {}
+    onTipClicked: () -> Unit = {},
+    onOpenPoll: () -> Unit = {},
+    onOpenVIP: () -> Unit = {}
 ) {
     var commentText by remember { mutableStateOf("") }
     val floatingHearts = remember { mutableStateListOf<FloatingHeart>() }
     val listState = rememberLazyListState()
     val haptic = LocalHapticFeedback.current
-    val scope = rememberCoroutineScope()
 
-    // Smooth auto scroll to bottom when new comment arrives
+    // Auto scroll comments to bottom when new comment arrives
     LaunchedEffect(comments.size) {
         if (comments.isNotEmpty()) {
             listState.animateScrollToItem(comments.size - 1)
@@ -92,7 +89,6 @@ fun LiveOverlay(
                 )
             }
     ) {
-        // Floating Hearts Layer
         floatingHearts.forEach { heart ->
             key(heart.id) {
                 AnimatedHeart(
@@ -116,7 +112,6 @@ fun LiveOverlay(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Creator Header
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
@@ -167,7 +162,6 @@ fun LiveOverlay(
                     }
                 }
 
-                // Live Indicator
                 if (videoItem.isLive) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -200,7 +194,7 @@ fun LiveOverlay(
                     .weight(1f, fill = false),
                 verticalAlignment = Alignment.Bottom
             ) {
-                // Live Comments Stream (Left side matching Smoke White Theme)
+                // Live Comments Stream (Left side)
                 LazyColumn(
                     state = listState,
                     modifier = Modifier
@@ -237,8 +231,30 @@ fun LiveOverlay(
                 // Side Action Buttons (Right side)
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                    verticalArrangement = Arrangement.spacedBy(14.dp)
                 ) {
+                    // VIP Fan Club Action
+                    IconButtonWithBadge(
+                        icon = Icons.Filled.Star,
+                        tint = CoinGold,
+                        count = "VIP",
+                        onClick = {
+                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                            onOpenVIP()
+                        }
+                    )
+
+                    // Live Poll Action
+                    IconButtonWithBadge(
+                        icon = Icons.Filled.HowToVote,
+                        tint = Color(0xFF007AFF),
+                        count = "Poll",
+                        onClick = {
+                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                            onOpenPoll()
+                        }
+                    )
+
                     // Tip Coins Action
                     IconButtonWithBadge(
                         icon = Icons.Filled.MonetizationOn,
@@ -256,14 +272,6 @@ fun LiveOverlay(
                         tint = Color(0xFFFF2D55),
                         count = "${videoItem.likesCount}",
                         onClick = { triggerHeartReaction() }
-                    )
-
-                    // Comments Action
-                    IconButtonWithBadge(
-                        icon = Icons.Filled.Comment,
-                        tint = Color.White,
-                        count = "${videoItem.commentsCount}",
-                        onClick = {}
                     )
 
                     // Share Action

@@ -10,10 +10,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.seeme.data.model.LivePoll
 import com.example.seeme.data.model.VideoItem
 import com.example.seeme.ui.coin.CoinViewModel
 import com.example.seeme.ui.components.CoinTippingDialog
 import com.example.seeme.ui.components.LiveOverlay
+import com.example.seeme.ui.components.LivePollDialog
+import com.example.seeme.ui.components.VIPClubDialog
 import com.example.seeme.ui.components.VideoPlayer
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -28,6 +31,10 @@ fun FeedScreen(
     val wallet by coinViewModel.wallet.collectAsState()
 
     var showTippingDialogForVideo by remember { mutableStateOf<VideoItem?>(null) }
+    var showPollDialogForVideo by remember { mutableStateOf<VideoItem?>(null) }
+    var showVIPDialogForVideo by remember { mutableStateOf<VideoItem?>(null) }
+
+    val activePoll = remember { LivePoll() }
 
     if (videos.isEmpty()) {
         Box(
@@ -67,6 +74,12 @@ fun FeedScreen(
                     },
                     onTipClicked = {
                         showTippingDialogForVideo = videoItem
+                    },
+                    onOpenPoll = {
+                        showPollDialogForVideo = videoItem
+                    },
+                    onOpenVIP = {
+                        showVIPDialogForVideo = videoItem
                     }
                 )
             }
@@ -88,6 +101,30 @@ fun FeedScreen(
                         )
                     }
                     showTippingDialogForVideo = null
+                }
+            )
+        }
+
+        // Live Poll Dialog
+        showPollDialogForVideo?.let { videoItem ->
+            LivePollDialog(
+                poll = activePoll,
+                onDismiss = { showPollDialogForVideo = null },
+                onVoteOption = { optId ->
+                    viewModel.addComment(videoItem.id, "📊 Voted in Live Poll!")
+                    showPollDialogForVideo = null
+                }
+            )
+        }
+
+        // VIP Fan Club Dialog
+        showVIPDialogForVideo?.let { videoItem ->
+            VIPClubDialog(
+                creatorName = videoItem.creatorName,
+                onDismiss = { showVIPDialogForVideo = null },
+                onSubscribe = {
+                    viewModel.addComment(videoItem.id, "🌟 Joined ${videoItem.creatorName}'s VIP Fan Club!")
+                    showVIPDialogForVideo = null
                 }
             )
         }
