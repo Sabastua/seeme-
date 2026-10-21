@@ -10,9 +10,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material.icons.filled.Cast
 import androidx.compose.material.icons.filled.MonetizationOn
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.Watch
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -24,7 +29,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.seeme.data.model.CreatorCountry
 import com.example.seeme.data.model.CreatorProfile
 import com.example.seeme.ui.components.PulsingDot
 import com.example.seeme.ui.theme.*
@@ -34,6 +38,11 @@ import com.example.seeme.ui.theme.*
 fun DiscoverHomeScreen(
     onSelectCreatorStream: (CreatorProfile) -> Unit,
     onOpenSuggestions: () -> Unit = {},
+    onOpenCast: () -> Unit = {},
+    onOpenWear: () -> Unit = {},
+    onOpenNotifications: () -> Unit = {},
+    onOpenDM: () -> Unit = {},
+    onOpenTopUp: () -> Unit = {},
     modifier: Modifier = Modifier,
     viewModel: DiscoverViewModel = viewModel()
 ) {
@@ -71,16 +80,38 @@ fun DiscoverHomeScreen(
                         color = InstagramTextDark
                     )
 
-                    Box(
-                        modifier = Modifier
-                            .background(CoinGoldBg, CircleShape)
-                            .border(1.dp, CoinGold.copy(alpha = 0.4f), CircleShape)
-                            .padding(horizontal = 12.dp, vertical = 6.dp)
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(6.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(imageVector = Icons.Filled.MonetizationOn, contentDescription = null, tint = CoinGold, modifier = Modifier.size(16.dp))
-                            Spacer(modifier = Modifier.width(4.dp))
-                            Text(text = "250 Coins", color = CoinGoldDark, fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                        IconButton(onClick = onOpenCast) {
+                            Icon(imageVector = Icons.Filled.Cast, contentDescription = "Cast", tint = InstagramTextDark)
+                        }
+
+                        IconButton(onClick = onOpenWear) {
+                            Icon(imageVector = Icons.Filled.Watch, contentDescription = "Watch Companion", tint = InstagramTextDark)
+                        }
+
+                        IconButton(onClick = onOpenNotifications) {
+                            Icon(imageVector = Icons.Filled.Notifications, contentDescription = "Notifications", tint = InstagramTextDark)
+                        }
+
+                        IconButton(onClick = onOpenDM) {
+                            Icon(imageVector = Icons.AutoMirrored.Filled.Send, contentDescription = "Messages", tint = InstagramPink)
+                        }
+
+                        Box(
+                            modifier = Modifier
+                                .background(CoinGoldBg, CircleShape)
+                                .border(1.dp, CoinGold.copy(alpha = 0.4f), CircleShape)
+                                .clickable { onOpenTopUp() }
+                                .padding(horizontal = 10.dp, vertical = 6.dp)
+                        ) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(imageVector = Icons.Filled.MonetizationOn, contentDescription = null, tint = CoinGold, modifier = Modifier.size(16.dp))
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Text(text = "250", color = CoinGoldDark, fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                            }
                         }
                     }
                 }
@@ -169,7 +200,7 @@ fun DiscoverHomeScreen(
 
                             Column {
                                 Text(hero.name, fontWeight = FontWeight.Bold, fontSize = 17.sp, color = InstagramTextDark)
-                                Text("${hero.handle} • 💻 ${hero.category}", fontSize = 12.sp, color = InstagramTextSecondary)
+                                Text("${hero.handle} • ${hero.category}", fontSize = 12.sp, color = InstagramTextSecondary)
                             }
                         }
 
@@ -210,15 +241,15 @@ fun DiscoverHomeScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text("👑", fontSize = 24.sp)
-                        Spacer(modifier = Modifier.width(12.dp))
+                        Icon(imageVector = Icons.Filled.Star, contentDescription = null, tint = CoinGoldDark, modifier = Modifier.size(22.dp))
+                        Spacer(modifier = Modifier.width(10.dp))
                         Column {
                             Text("Creator Suggestions & Rankings", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = InstagramTextDark)
-                            Text("✨ Discover new creators & #1 top rated streams", fontSize = 12.sp, color = InstagramTextSecondary)
+                            Text("Discover new creators & top rated streams", fontSize = 12.sp, color = InstagramTextSecondary)
                         }
                     }
 
-                    Text("Explore ➔", fontWeight = FontWeight.Bold, fontSize = 13.sp, color = InstagramPink)
+                    Text("Explore ->", fontWeight = FontWeight.Bold, fontSize = 13.sp, color = InstagramPink)
                 }
             }
         }

@@ -28,8 +28,10 @@ import com.example.seeme.ui.auth.AuthDialog
 import com.example.seeme.ui.auth.AuthViewModel
 import com.example.seeme.ui.broadcast.BroadcastScreen
 import com.example.seeme.ui.coin.CoinViewModel
+import com.example.seeme.ui.components.CastDialog
 import com.example.seeme.ui.components.NotificationCenterDialog
 import com.example.seeme.ui.components.TokenPurchaseDialog
+import com.example.seeme.ui.components.WearCompanionDialog
 import com.example.seeme.ui.discover.CreatorSuggestionsScreen
 import com.example.seeme.ui.discover.DiscoverHomeScreen
 import com.example.seeme.ui.dm.DirectMessageScreen
@@ -74,6 +76,8 @@ fun AppNavigation(
     var showTokenPurchaseDialog by remember { mutableStateOf(false) }
     var showAuthDialog by remember { mutableStateOf(false) }
     var showNotificationsDialog by remember { mutableStateOf(false) }
+    var showCastDialog by remember { mutableStateOf(false) }
+    var showWearDialog by remember { mutableStateOf(false) }
 
     val showBottomBar = currentRoute in listOf(Screen.Home.route, Screen.Profile.route)
 
@@ -194,7 +198,12 @@ fun AppNavigation(
                         },
                         onOpenSuggestions = {
                             navController.navigate(Screen.CreatorSuggestions.route)
-                        }
+                        },
+                        onOpenCast = { showCastDialog = true },
+                        onOpenWear = { showWearDialog = true },
+                        onOpenNotifications = { showNotificationsDialog = true },
+                        onOpenDM = { navController.navigate(Screen.DirectMessages.route) },
+                        onOpenTopUp = { showTokenPurchaseDialog = true }
                     )
                 }
                 composable(Screen.CreatorSuggestions.route) {
@@ -299,6 +308,14 @@ fun AppNavigation(
 
             if (showNotificationsDialog) {
                 NotificationCenterDialog(onDismiss = { showNotificationsDialog = false })
+            }
+
+            if (showCastDialog) {
+                CastDialog(onDismiss = { showCastDialog = false })
+            }
+
+            if (showWearDialog) {
+                WearCompanionDialog(onDismiss = { showWearDialog = false })
             }
         }
     }

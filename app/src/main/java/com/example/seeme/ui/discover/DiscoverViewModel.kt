@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.*
 
 class DiscoverViewModel : ViewModel() {
 
-    val categories = listOf("All", "🔴 Live Now", "💻 Coding", "🎮 Gaming", "🎵 Music", "🎨 Art", "🏋️ Fitness", "📱 Tech")
+    val categories = listOf("All", "Live Now", "Coding", "Gaming", "Music", "Art", "Fitness", "Tech")
 
     val countries = listOf(
         CreatorCountry("ALL", "All Countries", "🌍"),
