@@ -21,7 +21,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
+import com.example.seeme.ui.components.BeautyFilterControls
 import com.example.seeme.ui.components.CameraPreview
+import com.example.seeme.ui.components.ModerationDialog
 import com.example.seeme.ui.components.PulsingDot
 import kotlinx.coroutines.delay
 
@@ -102,6 +104,9 @@ fun BroadcastScreen(
     var streamTitle by remember { mutableStateOf("") }
     var broadcastTimeSeconds by remember { mutableLongStateOf(0L) }
 
+    var showBeautyFilters by remember { mutableStateOf(false) }
+    var showModerationShield by remember { mutableStateOf(false) }
+
     LaunchedEffect(isBroadcasting) {
         if (isBroadcasting) {
             broadcastTimeSeconds = 0L
@@ -176,6 +181,34 @@ fun BroadcastScreen(
                 }
 
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    // AR Beauty Filter Button
+                    IconButton(
+                        onClick = { showBeautyFilters = true },
+                        modifier = Modifier
+                            .background(Color.Black.copy(alpha = 0.4f), CircleShape)
+                            .size(44.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.AutoAwesome,
+                            contentDescription = "Beauty Effects",
+                            tint = Color.White
+                        )
+                    }
+
+                    // Moderation Shield Button
+                    IconButton(
+                        onClick = { showModerationShield = true },
+                        modifier = Modifier
+                            .background(Color.Black.copy(alpha = 0.4f), CircleShape)
+                            .size(44.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Shield,
+                            contentDescription = "Moderation",
+                            tint = Color.White
+                        )
+                    }
+
                     // Flip Camera Button
                     IconButton(
                         onClick = { isFrontCamera = !isFrontCamera },
@@ -275,6 +308,14 @@ fun BroadcastScreen(
                     }
                 }
             }
+        }
+
+        if (showBeautyFilters) {
+            BeautyFilterControls(onDismiss = { showBeautyFilters = false })
+        }
+
+        if (showModerationShield) {
+            ModerationDialog(onDismiss = { showModerationShield = false })
         }
     }
 }

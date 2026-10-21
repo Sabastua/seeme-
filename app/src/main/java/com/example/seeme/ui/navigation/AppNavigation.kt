@@ -28,6 +28,7 @@ import com.example.seeme.ui.auth.AuthDialog
 import com.example.seeme.ui.auth.AuthViewModel
 import com.example.seeme.ui.broadcast.BroadcastScreen
 import com.example.seeme.ui.coin.CoinViewModel
+import com.example.seeme.ui.components.NotificationCenterDialog
 import com.example.seeme.ui.components.TokenPurchaseDialog
 import com.example.seeme.ui.discover.CreatorSuggestionsScreen
 import com.example.seeme.ui.discover.DiscoverHomeScreen
@@ -36,6 +37,7 @@ import com.example.seeme.ui.feed.FeedScreen
 import com.example.seeme.ui.pk.PKBattleScreen
 import com.example.seeme.ui.profile.EditProfileScreen
 import com.example.seeme.ui.profile.ProfileScreen
+import com.example.seeme.ui.reels.ReelsRecorderScreen
 import com.example.seeme.ui.splash.SplashScreen
 import com.example.seeme.ui.theme.*
 import com.example.seeme.ui.wallet.WalletScreen
@@ -53,6 +55,7 @@ sealed class Screen(val route: String) {
     object AnalyticsStudio : Screen("analytics_studio")
     object AdminDashboard : Screen("admin_dashboard")
     object DirectMessages : Screen("direct_messages")
+    object ReelsRecorder : Screen("reels_recorder")
 }
 
 @Composable
@@ -70,6 +73,7 @@ fun AppNavigation(
 
     var showTokenPurchaseDialog by remember { mutableStateOf(false) }
     var showAuthDialog by remember { mutableStateOf(false) }
+    var showNotificationsDialog by remember { mutableStateOf(false) }
 
     val showBottomBar = currentRoute in listOf(Screen.Home.route, Screen.Profile.route)
 
@@ -242,6 +246,12 @@ fun AppNavigation(
                         onBack = { navController.popBackStack() }
                     )
                 }
+                composable(Screen.ReelsRecorder.route) {
+                    ReelsRecorderScreen(
+                        onClose = { navController.popBackStack() },
+                        onPostReel = { navController.popBackStack() }
+                    )
+                }
                 composable(Screen.Wallet.route) {
                     WalletScreen(
                         wallet = wallet,
@@ -285,6 +295,10 @@ fun AppNavigation(
                         showTokenPurchaseDialog = false
                     }
                 )
+            }
+
+            if (showNotificationsDialog) {
+                NotificationCenterDialog(onDismiss = { showNotificationsDialog = false })
             }
         }
     }
