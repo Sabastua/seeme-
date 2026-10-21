@@ -46,6 +46,8 @@ fun ProfileScreen(
     onEditProfile: () -> Unit = {},
     onOpenWallet: () -> Unit = {},
     onTopUpCoins: () -> Unit = {},
+    onOpenAnalytics: () -> Unit = {},
+    onOpenAdmin: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     var selectedTab by remember { mutableIntStateOf(0) }
@@ -91,12 +93,12 @@ fun ProfileScreen(
                 }
             }
 
-            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                IconButton(onClick = {}) {
-                    Icon(imageVector = Icons.Filled.AddBox, contentDescription = "Add", tint = InstagramTextDark)
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                IconButton(onClick = onOpenAnalytics) {
+                    Icon(imageVector = Icons.Filled.BarChart, contentDescription = "Analytics", tint = InstagramTextDark)
                 }
-                IconButton(onClick = {}) {
-                    Icon(imageVector = Icons.Filled.Menu, contentDescription = "Menu", tint = InstagramTextDark)
+                IconButton(onClick = onOpenAdmin) {
+                    Icon(imageVector = Icons.Filled.AdminPanelSettings, contentDescription = "Admin", tint = InstagramPink)
                 }
             }
         }

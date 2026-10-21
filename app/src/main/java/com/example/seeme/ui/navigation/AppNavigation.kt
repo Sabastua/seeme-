@@ -22,6 +22,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.seeme.ui.admin.AdminDashboardScreen
+import com.example.seeme.ui.analytics.AnalyticsStudioScreen
 import com.example.seeme.ui.auth.AuthDialog
 import com.example.seeme.ui.auth.AuthViewModel
 import com.example.seeme.ui.broadcast.BroadcastScreen
@@ -30,6 +32,7 @@ import com.example.seeme.ui.components.TokenPurchaseDialog
 import com.example.seeme.ui.discover.CreatorSuggestionsScreen
 import com.example.seeme.ui.discover.DiscoverHomeScreen
 import com.example.seeme.ui.feed.FeedScreen
+import com.example.seeme.ui.pk.PKBattleScreen
 import com.example.seeme.ui.profile.EditProfileScreen
 import com.example.seeme.ui.profile.ProfileScreen
 import com.example.seeme.ui.splash.SplashScreen
@@ -45,6 +48,9 @@ sealed class Screen(val route: String) {
     object Wallet : Screen("wallet")
     object EditProfile : Screen("edit_profile")
     object CreatorSuggestions : Screen("creator_suggestions")
+    object PKBattle : Screen("pk_battle")
+    object AnalyticsStudio : Screen("analytics_studio")
+    object AdminDashboard : Screen("admin_dashboard")
 }
 
 @Composable
@@ -101,7 +107,7 @@ fun AppNavigation(
                         )
                     )
 
-                    // Go Live Studio FAB (Requires Auth)
+                    // Go Live Studio FAB
                     Box(
                         modifier = Modifier
                             .weight(1f)
@@ -178,7 +184,7 @@ fun AppNavigation(
                 composable(Screen.Home.route) {
                     DiscoverHomeScreen(
                         onSelectCreatorStream = { _ ->
-                            navController.navigate(Screen.Feed.route)
+                            navController.navigate(Screen.PKBattle.route)
                         },
                         onOpenSuggestions = {
                             navController.navigate(Screen.CreatorSuggestions.route)
@@ -189,8 +195,14 @@ fun AppNavigation(
                     CreatorSuggestionsScreen(
                         onBack = { navController.popBackStack() },
                         onSelectCreator = { _ ->
-                            navController.navigate(Screen.Feed.route)
+                            navController.navigate(Screen.PKBattle.route)
                         }
+                    )
+                }
+                composable(Screen.PKBattle.route) {
+                    PKBattleScreen(
+                        onClose = { navController.popBackStack() },
+                        coinViewModel = coinViewModel
                     )
                 }
                 composable(Screen.Feed.route) {
@@ -208,7 +220,19 @@ fun AppNavigation(
                         onRequireAuth = { showAuthDialog = true },
                         onEditProfile = { navController.navigate(Screen.EditProfile.route) },
                         onOpenWallet = { navController.navigate(Screen.Wallet.route) },
-                        onTopUpCoins = { showTokenPurchaseDialog = true }
+                        onTopUpCoins = { showTokenPurchaseDialog = true },
+                        onOpenAnalytics = { navController.navigate(Screen.AnalyticsStudio.route) },
+                        onOpenAdmin = { navController.navigate(Screen.AdminDashboard.route) }
+                    )
+                }
+                composable(Screen.AnalyticsStudio.route) {
+                    AnalyticsStudioScreen(
+                        onBack = { navController.popBackStack() }
+                    )
+                }
+                composable(Screen.AdminDashboard.route) {
+                    AdminDashboardScreen(
+                        onBack = { navController.popBackStack() }
                     )
                 }
                 composable(Screen.Wallet.route) {
@@ -227,7 +251,6 @@ fun AppNavigation(
                 }
             }
 
-            // Mandatory Go Live Creator Sign Up Gate Sheet
             if (showAuthDialog) {
                 AuthDialog(
                     onDismiss = { showAuthDialog = false },
