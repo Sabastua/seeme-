@@ -34,10 +34,10 @@ class CoinViewModel : ViewModel() {
     )
 
     val paymentGateways = listOf(
-        PaymentGateway("mpesa", "M-Pesa Mobile Money", "Instant STK Push for Kenya & East Africa", "📱"),
-        PaymentGateway("card", "Credit / Debit Card", "Visa, Mastercard, American Express (Global)", "💳"),
-        PaymentGateway("paystack", "Paystack / Bank Transfer", "Direct bank debit for Nigeria & West Africa", "⚡"),
-        PaymentGateway("pix", "Pix Instant Payment", "Instant QR payment for Brazil", "🇧🇷"),
+        PaymentGateway("mpesa", "M-Pesa STK Push API", "Instant Mobile Money STK Push (Kenya 🇰🇪)", "📱"),
+        PaymentGateway("card", "Credit / Debit Card", "Visa, Mastercard, Amex Global", "💳"),
+        PaymentGateway("paystack", "Paystack / Bank Transfer", "Direct bank debit for Nigeria & West Africa 🇳🇬", "⚡"),
+        PaymentGateway("pix", "Pix Instant Payment", "Instant QR payment for Brazil 🇧🇷", "🇧🇷"),
         PaymentGateway("digital_wallet", "Google Pay / Apple Pay", "One-tap global wallet payment", "🌐")
     )
 

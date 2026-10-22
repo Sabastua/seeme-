@@ -50,7 +50,7 @@ fun AdminDashboardScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Admin Revenue Portal", fontWeight = FontWeight.Bold, fontSize = 18.sp, color = InstagramTextDark) },
+                title = { Text("Admin Revenue & Financial Portal", fontWeight = FontWeight.Bold, fontSize = 18.sp, color = InstagramTextDark) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = InstagramTextDark)
@@ -69,7 +69,7 @@ fun AdminDashboardScreen(
                 .padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Platform Revenue Breakdown Card
+            // Incoming Cash Flow & Monthly Recurring Revenue (MRR) Card
             item {
                 Card(
                     shape = RoundedCornerShape(24.dp),
@@ -84,30 +84,42 @@ fun AdminDashboardScreen(
                         verticalArrangement = Arrangement.spacedBy(14.dp)
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(imageVector = Icons.Filled.AdminPanelSettings, contentDescription = null, tint = InstagramPink, modifier = Modifier.size(26.dp))
+                            Icon(imageVector = Icons.Filled.AdminPanelSettings, contentDescription = null, tint = EmeraldGreenPrimary, modifier = Modifier.size(26.dp))
                             Spacer(modifier = Modifier.width(10.dp))
-                            Text("System Financial Summary", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = InstagramTextDark)
+                            Text("Real-Time Financial Dashboard", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = InstagramTextDark)
                         }
 
-                        Divider(color = SmokeWhiteBorder)
+                        HorizontalDivider(color = SmokeWhiteBorder)
 
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Column {
-                                Text("Gross Platform Volume", fontSize = 11.sp, color = InstagramTextSecondary)
-                                Text("$124,500.00", fontSize = 16.sp, fontWeight = FontWeight.ExtraBold, color = InstagramTextDark)
+                                Text("Monthly Incoming Flow (MRR)", fontSize = 11.sp, color = InstagramTextSecondary)
+                                Text("$124,500.00", fontSize = 17.sp, fontWeight = FontWeight.ExtraBold, color = InstagramTextDark)
                             }
 
                             Column {
-                                Text("🔴 60% Admin Fee", fontSize = 11.sp, color = InstagramTextSecondary)
-                                Text("$74,700.00", fontSize = 16.sp, fontWeight = FontWeight.ExtraBold, color = InstagramPink)
+                                Text("Total Monthly Admin Fee (60%)", fontSize = 11.sp, color = InstagramTextSecondary)
+                                Text("$74,700.00", fontSize = 17.sp, fontWeight = FontWeight.ExtraBold, color = EmeraldGreenPrimary)
+                            }
+                        }
+
+                        HorizontalDivider(color = SmokeWhiteBorder)
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Column {
+                                Text("Creator Payouts Pool (40%)", fontSize = 11.sp, color = InstagramTextSecondary)
+                                Text("$49,800.00", fontSize = 15.sp, fontWeight = FontWeight.Bold, color = Color(0xFF2E7D32))
                             }
 
                             Column {
-                                Text("🟢 40% Creator Pool", fontSize = 11.sp, color = InstagramTextSecondary)
-                                Text("$49,800.00", fontSize = 16.sp, fontWeight = FontWeight.ExtraBold, color = Color(0xFF2E7D32))
+                                Text("VIP Subscriptions Revenue", fontSize = 11.sp, color = InstagramTextSecondary)
+                                Text("$18,240.00/mo", fontSize = 15.sp, fontWeight = FontWeight.Bold, color = CoinGoldDark)
                             }
                         }
                     }
@@ -116,7 +128,7 @@ fun AdminDashboardScreen(
 
             // Pending Creator Payout Requests
             item {
-                Text("Pending Payout Withdrawal Requests", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = InstagramTextDark)
+                Text("Pending Creator Withdrawal Approvals", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = InstagramTextDark)
             }
 
             items(requests, key = { it.id }) { req ->
