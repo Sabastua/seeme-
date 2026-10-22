@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.seeme.data.model.CreatorProfile
-import com.example.seeme.ui.components.PulsingDot
+import com.example.seeme.ui.components.*
 import com.example.seeme.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -97,7 +97,7 @@ fun DiscoverHomeScreen(
                         }
 
                         IconButton(onClick = onOpenDM) {
-                            Icon(imageVector = Icons.AutoMirrored.Filled.Send, contentDescription = "Messages", tint = InstagramPink)
+                            Icon(imageVector = Icons.AutoMirrored.Filled.Send, contentDescription = "Messages", tint = EmeraldGreenPrimary)
                         }
 
                         Box(
@@ -116,7 +116,7 @@ fun DiscoverHomeScreen(
                     }
                 }
 
-                // Search Bar
+                // Glass Search Bar
                 OutlinedTextField(
                     value = searchQuery,
                     onValueChange = { viewModel.updateSearchQuery(it) },
@@ -125,11 +125,11 @@ fun DiscoverHomeScreen(
                     modifier = Modifier.fillMaxWidth(),
                     shape = CircleShape,
                     colors = TextFieldDefaults.colors(
-                        focusedContainerColor = SmokeWhiteSurface,
-                        unfocusedContainerColor = SmokeWhiteSurface,
+                        focusedContainerColor = GlassSurfaceWhite,
+                        unfocusedContainerColor = GlassSurfaceWhite,
                         focusedTextColor = InstagramTextDark,
                         unfocusedTextColor = InstagramTextDark,
-                        focusedIndicatorColor = InstagramPink,
+                        focusedIndicatorColor = EmeraldGreenPrimary,
                         unfocusedIndicatorColor = SmokeWhiteBorder
                     ),
                     singleLine = true
@@ -137,17 +137,14 @@ fun DiscoverHomeScreen(
             }
         }
 
-        // Hero Featured Stream Banner
+        // Hero Featured Liquid Glass Stream Banner
         featuredCreator?.let { hero ->
             item {
-                Card(
-                    shape = RoundedCornerShape(24.dp),
-                    colors = CardDefaults.cardColors(containerColor = SmokeWhiteSurface),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .shadow(8.dp, RoundedCornerShape(24.dp))
-                        .border(1.dp, SmokeWhiteBorder, RoundedCornerShape(24.dp))
-                        .clickable { onSelectCreatorStream(hero) }
+                GlassCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    cornerRadius = 24.dp,
+                    elevation = 8.dp,
+                    onClick = { onSelectCreatorStream(hero) }
                 ) {
                     Column(
                         modifier = Modifier.padding(18.dp),
@@ -184,13 +181,13 @@ fun DiscoverHomeScreen(
                                 modifier = Modifier
                                     .size(54.dp)
                                     .background(
-                                        brush = Brush.linearGradient(listOf(InstagramGradientStart, InstagramPink)),
+                                        brush = Brush.linearGradient(listOf(InstagramGradientStart, EmeraldGreenPrimary)),
                                         shape = CircleShape
                                     )
                                     .padding(2.dp)
-                                    .background(SmokeWhiteSurface, CircleShape)
+                                    .background(GlassSurfaceWhite, CircleShape)
                                     .padding(2.dp)
-                                    .background(InstagramPink, CircleShape),
+                                    .background(EmeraldGreenPrimary, CircleShape),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(hero.name.take(1).uppercase(), fontWeight = FontWeight.Bold, color = Color.White, fontSize = 20.sp)
@@ -206,13 +203,12 @@ fun DiscoverHomeScreen(
 
                         Text(hero.bio, fontSize = 13.sp, color = InstagramTextDark, maxLines = 2)
 
-                        Button(
+                        GlassButton(
                             onClick = { onSelectCreatorStream(hero) },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(46.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = InstagramPink),
-                            shape = CircleShape
+                            containerColor = EmeraldGreenPrimary
                         ) {
                             Icon(imageVector = Icons.Filled.PlayArrow, contentDescription = null, tint = Color.White)
                             Spacer(modifier = Modifier.width(6.dp))
@@ -223,15 +219,14 @@ fun DiscoverHomeScreen(
             }
         }
 
-        // Suggestions & Rankings Banner
+        // Suggestions & Rankings Glass Banner
         item {
-            Card(
-                shape = RoundedCornerShape(18.dp),
-                colors = CardDefaults.cardColors(containerColor = CoinGoldBg),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .border(1.dp, CoinGold.copy(alpha = 0.5f), RoundedCornerShape(18.dp))
-                    .clickable { onOpenSuggestions() }
+            GlassCard(
+                modifier = Modifier.fillMaxWidth(),
+                cornerRadius = 20.dp,
+                backgroundColor = CoinGoldBg,
+                borderColor = CoinGold.copy(alpha = 0.5f),
+                onClick = onOpenSuggestions
             ) {
                 Row(
                     modifier = Modifier
@@ -249,7 +244,7 @@ fun DiscoverHomeScreen(
                         }
                     }
 
-                    Text("Explore ->", fontWeight = FontWeight.Bold, fontSize = 13.sp, color = InstagramPink)
+                    Text("Explore ->", fontWeight = FontWeight.Bold, fontSize = 13.sp, color = EmeraldGreenPrimary)
                 }
             }
         }
@@ -264,22 +259,11 @@ fun DiscoverHomeScreen(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     items(viewModel.categories) { cat ->
-                        val isSelected = selectedCategory == cat
-                        Box(
-                            modifier = Modifier
-                                .shadow(if (isSelected) 3.dp else 1.dp, CircleShape)
-                                .background(if (isSelected) InstagramPink else SmokeWhiteSurface, CircleShape)
-                                .border(1.dp, if (isSelected) InstagramPink else SmokeWhiteBorder, CircleShape)
-                                .clickable { viewModel.selectCategory(cat) }
-                                .padding(horizontal = 16.dp, vertical = 8.dp)
-                        ) {
-                            Text(
-                                text = cat,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 13.sp,
-                                color = if (isSelected) Color.White else InstagramTextDark
-                            )
-                        }
+                        GlassChip(
+                            text = cat,
+                            isSelected = selectedCategory == cat,
+                            onClick = { viewModel.selectCategory(cat) }
+                        )
                     }
                 }
             }
@@ -295,26 +279,12 @@ fun DiscoverHomeScreen(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     items(viewModel.countries) { cty ->
-                        val isSelected = selectedCountry.code == cty.code
-                        Box(
-                            modifier = Modifier
-                                .shadow(if (isSelected) 3.dp else 1.dp, CircleShape)
-                                .background(if (isSelected) InstagramTextDark else SmokeWhiteSurface, CircleShape)
-                                .border(1.dp, if (isSelected) InstagramTextDark else SmokeWhiteBorder, CircleShape)
-                                .clickable { viewModel.selectCountry(cty) }
-                                .padding(horizontal = 14.dp, vertical = 8.dp)
-                        ) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Text(cty.flagEmoji, fontSize = 14.sp)
-                                Spacer(modifier = Modifier.width(6.dp))
-                                Text(
-                                    text = cty.name,
-                                    fontWeight = FontWeight.SemiBold,
-                                    fontSize = 13.sp,
-                                    color = if (isSelected) Color.White else InstagramTextDark
-                                )
-                            }
-                        }
+                        GlassChip(
+                            text = "${cty.flagEmoji} ${cty.name}",
+                            isSelected = selectedCountry.code == cty.code,
+                            onClick = { viewModel.selectCountry(cty) },
+                            activeColor = InstagramTextDark
+                        )
                     }
                 }
             }
@@ -328,7 +298,7 @@ fun DiscoverHomeScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text("Creators (${creators.size})", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = InstagramTextDark)
-                Text("Real-time Live", fontSize = 12.sp, color = InstagramPink, fontWeight = FontWeight.SemiBold)
+                Text("Real-time Live", fontSize = 12.sp, color = EmeraldGreenPrimary, fontWeight = FontWeight.SemiBold)
             }
         }
 
@@ -351,14 +321,11 @@ fun CreatorCard(
     creator: CreatorProfile,
     onWatchStream: () -> Unit
 ) {
-    Card(
-        shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = SmokeWhiteSurface),
-        modifier = Modifier
-            .fillMaxWidth()
-            .shadow(3.dp, RoundedCornerShape(20.dp))
-            .border(1.dp, SmokeWhiteBorder, RoundedCornerShape(20.dp))
-            .clickable { onWatchStream() }
+    GlassCard(
+        modifier = Modifier.fillMaxWidth(),
+        cornerRadius = 20.dp,
+        elevation = 3.dp,
+        onClick = onWatchStream
     ) {
         Row(
             modifier = Modifier
@@ -375,13 +342,13 @@ fun CreatorCard(
                     modifier = Modifier
                         .size(52.dp)
                         .background(
-                            brush = Brush.linearGradient(listOf(InstagramPink, InstagramGradientEnd)),
+                            brush = Brush.linearGradient(listOf(EmeraldGreenPrimary, InstagramGradientEnd)),
                             shape = CircleShape
                         )
                         .padding(2.dp)
-                        .background(SmokeWhiteSurface, CircleShape)
+                        .background(GlassSurfaceWhite, CircleShape)
                         .padding(2.dp)
-                        .background(InstagramPink, CircleShape),
+                        .background(EmeraldGreenPrimary, CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(creator.name.take(1).uppercase(), fontWeight = FontWeight.Bold, color = Color.White, fontSize = 18.sp)
@@ -411,11 +378,9 @@ fun CreatorCard(
                 }
             }
 
-            Button(
+            GlassButton(
                 onClick = onWatchStream,
-                contentPadding = PaddingValues(horizontal = 14.dp, vertical = 6.dp),
-                shape = CircleShape,
-                colors = ButtonDefaults.buttonColors(containerColor = if (creator.isLive) InstagramPink else InstagramTextDark),
+                containerColor = if (creator.isLive) EmeraldGreenPrimary else InstagramTextDark,
                 modifier = Modifier.height(36.dp)
             ) {
                 Text(if (creator.isLive) "Watch" else "View", fontWeight = FontWeight.Bold, fontSize = 12.sp, color = Color.White)

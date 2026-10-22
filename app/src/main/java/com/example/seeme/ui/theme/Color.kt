@@ -14,6 +14,13 @@ val InstagramTextSecondary = Color(0xFF6C757D)
 val EmeraldGreenPrimary = Color(0xFF10B981)
 val EmeraldGreenDark = Color(0xFF059669)
 val EmeraldGreenContainer = Color(0xFFD1FAE5)
+
+// Liquid Glass Palette
+val GlassSurfaceWhite = Color(0xF2FFFFFF)
+val GlassBorderWhite = Color(0x99FFFFFF)
+val LiquidCyan = Color(0xFF06B6D4)
+val LiquidMint = Color(0xFFA7F3D0)
+
 val InstagramGradientStart = Color(0xFF047857)
 val InstagramGradientEnd = Color(0xFF10B981)
 

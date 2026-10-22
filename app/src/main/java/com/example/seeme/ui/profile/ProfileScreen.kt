@@ -2,7 +2,6 @@ package com.example.seeme.ui.profile
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -18,7 +17,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -27,6 +25,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.seeme.data.model.CoinWallet
 import com.example.seeme.data.model.UserProfile
+import com.example.seeme.ui.components.GlassButton
+import com.example.seeme.ui.components.GlassCard
 import com.example.seeme.ui.theme.*
 
 data class PostThumbnail(
@@ -87,7 +87,7 @@ fun ProfileScreen(
                     Icon(
                         imageVector = Icons.Filled.Verified,
                         contentDescription = "Verified",
-                        tint = InstagramPink,
+                        tint = EmeraldGreenPrimary,
                         modifier = Modifier.size(18.dp)
                     )
                 }
@@ -98,21 +98,19 @@ fun ProfileScreen(
                     Icon(imageVector = Icons.Filled.BarChart, contentDescription = "Analytics", tint = InstagramTextDark)
                 }
                 IconButton(onClick = onOpenAdmin) {
-                    Icon(imageVector = Icons.Filled.AdminPanelSettings, contentDescription = "Admin", tint = InstagramPink)
+                    Icon(imageVector = Icons.Filled.AdminPanelSettings, contentDescription = "Admin", tint = EmeraldGreenPrimary)
                 }
             }
         }
 
-        // Guest Viewer Mode Banner
+        // Guest Mode Glass Banner
         if (userProfile.isGuest) {
-            Card(
-                shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = SmokeWhiteSurface),
+            GlassCard(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 8.dp)
-                    .shadow(4.dp, RoundedCornerShape(20.dp))
-                    .border(1.dp, InstagramPink.copy(alpha = 0.4f), RoundedCornerShape(20.dp))
+                    .padding(horizontal = 20.dp, vertical = 8.dp),
+                cornerRadius = 20.dp,
+                borderColor = EmeraldGreenPrimary.copy(alpha = 0.4f)
             ) {
                 Column(
                     modifier = Modifier.padding(18.dp),
@@ -127,13 +125,12 @@ fun ProfileScreen(
                         }
                     }
 
-                    Button(
+                    GlassButton(
                         onClick = onRequireAuth,
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(44.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = InstagramPink),
-                        shape = CircleShape
+                        containerColor = EmeraldGreenPrimary
                     ) {
                         Text("Sign Up as Creator to Go Live 🚀", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = Color.White)
                     }
@@ -154,14 +151,14 @@ fun ProfileScreen(
                     .size(88.dp)
                     .background(
                         brush = Brush.linearGradient(
-                            listOf(InstagramGradientStart, InstagramPink, InstagramGradientEnd)
+                            listOf(InstagramGradientStart, EmeraldGreenPrimary, InstagramGradientEnd)
                         ),
                         shape = CircleShape
                     )
                     .padding(3.dp)
                     .background(SmokeWhiteBg, CircleShape)
                     .padding(3.dp)
-                    .background(InstagramPink, CircleShape),
+                    .background(EmeraldGreenPrimary, CircleShape),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -245,16 +242,14 @@ fun ProfileScreen(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // Coin Wallet & Revenue Card ($2.20/coin + 60% Admin / 40% Creator Split)
-        Card(
-            shape = RoundedCornerShape(20.dp),
-            colors = CardDefaults.cardColors(containerColor = SmokeWhiteSurface),
+        // Liquid Glass Creator Coin Wallet Card
+        GlassCard(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 20.dp)
-                .shadow(6.dp, RoundedCornerShape(20.dp))
-                .border(1.dp, SmokeWhiteBorder, RoundedCornerShape(20.dp))
-                .clickable { onOpenWallet() }
+                .padding(horizontal = 20.dp),
+            cornerRadius = 20.dp,
+            elevation = 6.dp,
+            onClick = onOpenWallet
         ) {
             Column(
                 modifier = Modifier.padding(18.dp),
@@ -293,7 +288,7 @@ fun ProfileScreen(
 
                     Column {
                         Text(text = "App Fee (60%)", fontSize = 11.sp, color = InstagramTextSecondary)
-                        Text(text = "-$${String.format("%.2f", wallet.adminPlatformFeeUsd)}", fontSize = 15.sp, fontWeight = FontWeight.Bold, color = InstagramPink)
+                        Text(text = "-$${String.format("%.2f", wallet.adminPlatformFeeUsd)}", fontSize = 15.sp, fontWeight = FontWeight.Bold, color = EmeraldGreenPrimary)
                     }
 
                     Column {
@@ -302,13 +297,12 @@ fun ProfileScreen(
                     }
                 }
 
-                Button(
+                GlassButton(
                     onClick = onOpenWallet,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(44.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = InstagramTextDark),
-                    shape = RoundedCornerShape(12.dp)
+                    containerColor = InstagramTextDark
                 ) {
                     Text(text = "View Wallet Details & Withdraw", fontWeight = FontWeight.Bold, fontSize = 13.sp, color = Color.White)
                 }
@@ -321,8 +315,7 @@ fun ProfileScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(SmokeWhiteSurface)
-                .border(width = 1.dp, color = SmokeWhiteBorder)
+                .background(GlassSurfaceWhite)
         ) {
             TabItem(
                 icon = Icons.Outlined.GridOn,
@@ -356,14 +349,12 @@ fun ProfileScreen(
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     rowPosts.forEach { post ->
-                        Card(
-                            shape = RoundedCornerShape(12.dp),
-                            colors = CardDefaults.cardColors(containerColor = SmokeWhiteSurface),
+                        GlassCard(
                             modifier = Modifier
                                 .weight(1f)
-                                .height(160.dp)
-                                .shadow(2.dp, RoundedCornerShape(12.dp))
-                                .border(1.dp, SmokeWhiteBorder, RoundedCornerShape(12.dp))
+                                .height(160.dp),
+                            cornerRadius = 14.dp,
+                            elevation = 2.dp
                         ) {
                             Box(modifier = Modifier.fillMaxSize()) {
                                 Column(
@@ -375,7 +366,7 @@ fun ProfileScreen(
                                     if (post.isLiveReplay) {
                                         Box(
                                             modifier = Modifier
-                                                .background(InstagramPink, CircleShape)
+                                                .background(EmeraldGreenPrimary, CircleShape)
                                                 .padding(horizontal = 8.dp, vertical = 2.dp)
                                         ) {
                                             Text("REPLAY", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 9.sp)
@@ -428,7 +419,7 @@ fun TabItem(
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = if (isSelected) InstagramPink else InstagramTextSecondary,
+            tint = if (isSelected) EmeraldGreenPrimary else InstagramTextSecondary,
             modifier = Modifier.size(24.dp)
         )
     }
