@@ -8,21 +8,17 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
-import androidx.compose.material.icons.filled.Cast
 import androidx.compose.material.icons.filled.MonetizationOn
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.Watch
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -57,16 +53,16 @@ fun DiscoverHomeScreen(
         modifier = modifier
             .fillMaxSize()
             .background(SmokeWhiteBg)
-            .padding(horizontal = 20.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+            .padding(horizontal = 24.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        // Top Header Row
+        // Clean Decluttered Header Row
         item {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                    .padding(top = 18.dp),
+                verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -76,22 +72,14 @@ fun DiscoverHomeScreen(
                     Text(
                         text = "SeeMe",
                         fontWeight = FontWeight.ExtraBold,
-                        fontSize = 26.sp,
+                        fontSize = 28.sp,
                         color = InstagramTextDark
                     )
 
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(6.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        IconButton(onClick = onOpenCast) {
-                            Icon(imageVector = Icons.Filled.Cast, contentDescription = "Cast", tint = InstagramTextDark)
-                        }
-
-                        IconButton(onClick = onOpenWear) {
-                            Icon(imageVector = Icons.Filled.Watch, contentDescription = "Watch Companion", tint = InstagramTextDark)
-                        }
-
                         IconButton(onClick = onOpenNotifications) {
                             Icon(imageVector = Icons.Filled.Notifications, contentDescription = "Notifications", tint = InstagramTextDark)
                         }
@@ -105,18 +93,18 @@ fun DiscoverHomeScreen(
                                 .background(CoinGoldBg, CircleShape)
                                 .border(1.dp, CoinGold.copy(alpha = 0.4f), CircleShape)
                                 .clickable { onOpenTopUp() }
-                                .padding(horizontal = 10.dp, vertical = 6.dp)
+                                .padding(horizontal = 12.dp, vertical = 6.dp)
                         ) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Icon(imageVector = Icons.Filled.MonetizationOn, contentDescription = null, tint = CoinGold, modifier = Modifier.size(16.dp))
                                 Spacer(modifier = Modifier.width(4.dp))
-                                Text(text = "250", color = CoinGoldDark, fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                                Text(text = "250", color = CoinGoldDark, fontWeight = FontWeight.Bold, fontSize = 13.sp)
                             }
                         }
                     }
                 }
 
-                // Glass Search Bar
+                // Spacious Glass Search Bar
                 OutlinedTextField(
                     value = searchQuery,
                     onValueChange = { viewModel.updateSearchQuery(it) },
@@ -137,18 +125,18 @@ fun DiscoverHomeScreen(
             }
         }
 
-        // Hero Featured Liquid Glass Stream Banner
+        // Hero Featured Stream Banner
         featuredCreator?.let { hero ->
             item {
                 GlassCard(
                     modifier = Modifier.fillMaxWidth(),
                     cornerRadius = 24.dp,
-                    elevation = 8.dp,
+                    elevation = 6.dp,
                     onClick = { onSelectCreatorStream(hero) }
                 ) {
                     Column(
-                        modifier = Modifier.padding(18.dp),
-                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                        modifier = Modifier.padding(20.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
@@ -170,7 +158,7 @@ fun DiscoverHomeScreen(
                             Box(
                                 modifier = Modifier
                                     .background(SmokeWhiteCard, CircleShape)
-                                    .padding(horizontal = 10.dp, vertical = 4.dp)
+                                    .padding(horizontal = 12.dp, vertical = 4.dp)
                             ) {
                                 Text("${hero.country.flagEmoji} ${hero.country.name}", fontWeight = FontWeight.SemiBold, fontSize = 12.sp, color = InstagramTextDark)
                             }
@@ -179,7 +167,7 @@ fun DiscoverHomeScreen(
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Box(
                                 modifier = Modifier
-                                    .size(54.dp)
+                                    .size(56.dp)
                                     .background(
                                         brush = Brush.linearGradient(listOf(InstagramGradientStart, EmeraldGreenPrimary)),
                                         shape = CircleShape
@@ -193,7 +181,7 @@ fun DiscoverHomeScreen(
                                 Text(hero.name.take(1).uppercase(), fontWeight = FontWeight.Bold, color = Color.White, fontSize = 20.sp)
                             }
 
-                            Spacer(modifier = Modifier.width(12.dp))
+                            Spacer(modifier = Modifier.width(14.dp))
 
                             Column {
                                 Text(hero.name, fontWeight = FontWeight.Bold, fontSize = 17.sp, color = InstagramTextDark)
@@ -201,13 +189,13 @@ fun DiscoverHomeScreen(
                             }
                         }
 
-                        Text(hero.bio, fontSize = 13.sp, color = InstagramTextDark, maxLines = 2)
+                        Text(hero.bio, fontSize = 13.sp, color = InstagramTextDark, maxLines = 2, lineHeight = 18.sp)
 
                         GlassButton(
                             onClick = { onSelectCreatorStream(hero) },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(46.dp),
+                                .height(48.dp),
                             containerColor = EmeraldGreenPrimary
                         ) {
                             Icon(imageVector = Icons.Filled.PlayArrow, contentDescription = null, tint = Color.White)
@@ -219,7 +207,7 @@ fun DiscoverHomeScreen(
             }
         }
 
-        // Suggestions & Rankings Glass Banner
+        // Suggestions & Rankings Banner
         item {
             GlassCard(
                 modifier = Modifier.fillMaxWidth(),
@@ -251,11 +239,11 @@ fun DiscoverHomeScreen(
 
         // Categories Filter Section
         item {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text("Explore Categories", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = InstagramTextDark)
 
                 LazyRow(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     items(viewModel.categories) { cat ->
@@ -271,11 +259,11 @@ fun DiscoverHomeScreen(
 
         // Countries Filter Section
         item {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text("Browse by Country", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = InstagramTextDark)
 
                 LazyRow(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     items(viewModel.countries) { cty ->
@@ -311,7 +299,7 @@ fun DiscoverHomeScreen(
         }
 
         item {
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(28.dp))
         }
     }
 }
@@ -354,7 +342,7 @@ fun CreatorCard(
                     Text(creator.name.take(1).uppercase(), fontWeight = FontWeight.Bold, color = Color.White, fontSize = 18.sp)
                 }
 
-                Spacer(modifier = Modifier.width(12.dp))
+                Spacer(modifier = Modifier.width(14.dp))
 
                 Column {
                     Row(verticalAlignment = Alignment.CenterVertically) {

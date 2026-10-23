@@ -6,11 +6,11 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
-private val SmokeWhiteColorScheme = lightColorScheme(
-    primary = InstagramPink,
+private val PureWhiteGlassColorScheme = lightColorScheme(
+    primary = InstagramTextDark,
     onPrimary = Color.White,
-    primaryContainer = CoinGoldBg,
-    onPrimaryContainer = CoinGoldDark,
+    primaryContainer = SmokeWhiteCard,
+    onPrimaryContainer = InstagramTextDark,
     secondary = InstagramTextSecondary,
     onSecondary = Color.White,
     background = SmokeWhiteBg,
@@ -28,7 +28,7 @@ fun SeemeTheme(
     content: @Composable () -> Unit
 ) {
     MaterialTheme(
-        colorScheme = SmokeWhiteColorScheme,
+        colorScheme = PureWhiteGlassColorScheme,
         typography = Typography,
         content = content
     )

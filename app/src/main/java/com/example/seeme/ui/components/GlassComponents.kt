@@ -22,10 +22,10 @@ import com.example.seeme.ui.theme.*
 @Composable
 fun GlassCard(
     modifier: Modifier = Modifier,
-    cornerRadius: Dp = 24.dp,
-    elevation: Dp = 6.dp,
+    cornerRadius: Dp = 22.dp,
+    elevation: Dp = 4.dp,
     backgroundColor: Color = GlassSurfaceWhite,
-    borderColor: Color = GlassBorderWhite,
+    borderColor: Color = SmokeWhiteBorder,
     onClick: (() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit
 ) {
@@ -35,9 +35,9 @@ fun GlassCard(
         modifier = modifier
             .shadow(elevation, RoundedCornerShape(cornerRadius))
             .border(
-                width = 1.5.dp,
+                width = 1.dp,
                 brush = Brush.linearGradient(
-                    listOf(borderColor, SmokeWhiteBorder, borderColor.copy(alpha = 0.3f))
+                    listOf(borderColor, SmokeWhiteBorder, borderColor.copy(alpha = 0.5f))
                 ),
                 shape = RoundedCornerShape(cornerRadius)
             )
@@ -53,11 +53,11 @@ fun GlassChip(
     isSelected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    activeColor: Color = EmeraldGreenPrimary
+    activeColor: Color = InstagramTextDark
 ) {
     Box(
         modifier = modifier
-            .shadow(if (isSelected) 4.dp else 1.dp, CircleShape)
+            .shadow(if (isSelected) 3.dp else 1.dp, CircleShape)
             .background(
                 if (isSelected) activeColor else GlassSurfaceWhite,
                 CircleShape
@@ -84,16 +84,16 @@ fun GlassChip(
 fun GlassButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    containerColor: Color = EmeraldGreenPrimary,
+    containerColor: Color = InstagramTextDark,
     content: @Composable RowScope.() -> Unit
 ) {
     Button(
         onClick = onClick,
         modifier = modifier
-            .shadow(6.dp, CircleShape)
+            .shadow(4.dp, CircleShape)
             .border(
                 width = 1.dp,
-                color = Color.White.copy(alpha = 0.4f),
+                color = Color.White.copy(alpha = 0.2f),
                 shape = CircleShape
             ),
         colors = ButtonDefaults.buttonColors(containerColor = containerColor),
